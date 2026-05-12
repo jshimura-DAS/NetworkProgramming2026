@@ -8,6 +8,7 @@ namespace SimpleHost
     {
         public static void Main()
         {
+            Console.WriteLine("SimpleHost is starting...");
             SocketServer();
         }
 

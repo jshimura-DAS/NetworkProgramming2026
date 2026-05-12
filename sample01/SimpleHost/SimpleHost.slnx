@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="SimpleClient/SimpleClient.csproj" Id="162ebb43-d09d-4d84-8445-7db4f7849f5b" />
   <Project Path="SimpleHost/SimpleHost.csproj" />
 </Solution>
