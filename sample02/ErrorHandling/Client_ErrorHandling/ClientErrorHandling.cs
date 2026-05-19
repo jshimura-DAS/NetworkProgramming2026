@@ -1,16 +1,17 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Common;
 
-namespace SimpleClient
+namespace Client_ErrorHandling
 {
-    internal class SimpleClient
+    internal class ClientErrorHandling
     {
         public static void Main()
         {
             //今回送るHello World!
             string st = "Hello World!Shimura";
-            Console.WriteLine("SimpleClient");
+            Console.WriteLine("lientErrorHandling");
             SocketClient(st);
             Console.ReadKey();
         }
@@ -41,19 +42,35 @@ namespace SimpleClient
                 Console.WriteLine($"Connect Faild{e.ToString()}");
                 return;
             }
-            //Sendで送信している。
-            byte[] msg = Encoding.UTF8.GetBytes(st + "<EOF>");
-            socket.Send(msg);
 
-            //Receiveで受信している。
-            byte[] bytes = new byte[1024];
-            int bytesRec = socket.Receive(bytes);
-            string data1 = Encoding.UTF8.GetString(bytes, 0, bytesRec);
-            Console.WriteLine(data1);
+            // ProtocolHandlerを使ってデータを送信
+            Console.WriteLine($"送信データ: {st}");
+            if (!ProtocolHandler.SendData(socket, st))
+            {
+                Console.WriteLine("送信に失敗しました。");
+                socket.Close();
+                return;
+            }
+
+            // ProtocolHandlerを使ってデータを受信
+            var receiveResult = ProtocolHandler.ReceiveData(socket);
+
+            if (!receiveResult.Success)
+            {
+                // エラーが発生した場合
+                Console.WriteLine($"エラー検知: {receiveResult.ErrorMessage}");
+                Console.WriteLine($"エラータイプ: {ProtocolHandler.GetErrorDescription(receiveResult.ErrorType)}");
+            }
+            else
+            {
+                // 正常に受信したデータを表示
+                Console.WriteLine($"受信データ: {receiveResult.Data}");
+            }
 
             //ソケットを終了している。
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
         }
+
     }
 }
