@@ -16,7 +16,7 @@ namespace SimpleHost
         {
             //ここからIPアドレスやポートの設定
             // 着信データ用のデータバッファー。
-            byte[] bytes = new byte[1024];
+            byte[] bytes = new byte[500000000];
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             Console.WriteLine($"ホスト名: {ipHostInfo.HostName}");
             Console.WriteLine($"IPアドレス一覧 (取得数: {ipHostInfo.AddressList.Length}):");
@@ -25,7 +25,7 @@ namespace SimpleHost
                 Console.WriteLine($"  [{i}] {ipHostInfo.AddressList[i]} (AddressFamily: {ipHostInfo.AddressList[i].AddressFamily})");
             }
 
-            IPAddress ipAddress = ipHostInfo.AddressList[2];
+            IPAddress ipAddress = ipHostInfo.AddressList[1];
             Console.WriteLine($"\n使用するIPアドレス: {ipAddress}");
 
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);

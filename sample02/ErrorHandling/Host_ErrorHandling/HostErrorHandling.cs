@@ -17,7 +17,7 @@ namespace Host_ErrorHandling
         {
             //ここからIPアドレスやポートの設定
             // 着信データ用のデータバッファー。
-            byte[] bytes = new byte[1024];
+            //byte[] bytes = new byte[1024];
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             Console.WriteLine($"ホスト名: {ipHostInfo.HostName}");
             Console.WriteLine($"IPアドレス一覧 (取得数: {ipHostInfo.AddressList.Length}):");
