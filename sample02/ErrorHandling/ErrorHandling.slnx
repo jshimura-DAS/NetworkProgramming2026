@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="Client_ErrorHandling/Client_ErrorHandling.csproj" />
+  <Project Path="Common/Common.csproj" />
   <Project Path="Host_ErrorHandling/Host_ErrorHandling.csproj" />
 </Solution>
