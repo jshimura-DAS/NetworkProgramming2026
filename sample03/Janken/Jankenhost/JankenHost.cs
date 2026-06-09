@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using Common;
+using JankenLib;
 
 namespace Jankenhost
 {
@@ -8,7 +9,8 @@ namespace Jankenhost
     {
         public static void Main()
         {
-            Console.WriteLine("HostErrorHandling is starting...");
+            Console.WriteLine("=== じゃんけんホスト ===");
+            Console.WriteLine("クライアントからの接続を待っています...\n");
             SocketServer();
         }
 
@@ -43,6 +45,7 @@ namespace Jankenhost
 
             //通信の確率
             Socket handler = listener.Accept();
+            Console.WriteLine("クライアントが接続しました。\n");
 
             // データの受信と検証(ProtocolHandlerを使用)
             var receiveResult = ProtocolHandler.ReceiveData(handler);
@@ -63,8 +66,36 @@ namespace Jankenhost
             // 正常に受信したデータを表示
             Console.WriteLine($"受信データ: {receiveResult.Data}");
 
-            // 大文字に変更
-            string responseData = receiveResult.Data.ToUpper();
+            // クライアントの手を解析
+            Hand? clientHand = Janken.ParseHand(receiveResult.Data);
+
+            if (clientHand == null)
+            {
+                string errorMessage = "無効な手です。0, 1, 2 のいずれかを送信してください。";
+                ProtocolHandler.SendData(handler, errorMessage);
+                Console.WriteLine($"送信データ: {errorMessage}");
+
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
+                listener.Close();
+                return;
+            }
+
+            Console.WriteLine($"クライアントの手: {Janken.GetHandName(clientHand.Value)}");
+
+            // ホストの手をランダムに生成
+            Hand hostHand = Janken.GetRandomHand();
+            Console.WriteLine($"ホストの手: {Janken.GetHandName(hostHand)}");
+
+            // 勝敗判定（クライアントから見た結果）
+            Result result = Janken.Judge(clientHand.Value, hostHand);
+            Console.WriteLine($"結果: クライアントの{Janken.GetResultMessage(result)}");
+
+            // 結果メッセージを作成
+            string responseData = $"【じゃんけん結果】\n" +
+                                  $"あなたの手: {Janken.GetHandName(clientHand.Value)}\n" +
+                                  $"ホストの手: {Janken.GetHandName(hostHand)}\n" +
+                                  $"結果: あなたの{Janken.GetResultMessage(result)}!";
 
             // クライアントにProtocolHandlerを使って返す
             if (!ProtocolHandler.SendData(handler, responseData))
@@ -73,12 +104,13 @@ namespace Jankenhost
             }
             else
             {
-                Console.WriteLine($"送信データ: {responseData}");
+                Console.WriteLine($"\n送信データ:\n{responseData}");
             }
 
             //ソケットの終了
             handler.Shutdown(SocketShutdown.Both);
             handler.Close();
+            listener.Close();
         }
 
     }

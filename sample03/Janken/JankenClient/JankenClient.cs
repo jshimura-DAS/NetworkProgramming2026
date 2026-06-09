@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using Common;
+using JankenLib;
 
 
 namespace JankenClient
@@ -10,10 +11,34 @@ namespace JankenClient
     {
         public static void Main()
         {
-            //今回送るHello World!
-            string st = "Hello World!Shimura";
-            Console.WriteLine("lientErrorHandling");
-            SocketClient(st);
+            Console.WriteLine("=== じゃんけんクライアント ===");
+            Console.WriteLine("じゃんけんの手を選んでください:");
+            Console.WriteLine("0: グー");
+            Console.WriteLine("1: パー");
+            Console.WriteLine("2: チョキ");
+            Console.Write("入力 > ");
+
+            string? input = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(input))
+            {
+                Console.WriteLine("入力がありません。");
+                Console.ReadKey();
+                return;
+            }
+
+            Hand? selectedHand = Janken.ParseHand(input);
+
+            if (selectedHand == null)
+            {
+                Console.WriteLine("無効な入力です。0, 1, 2 のいずれかを入力してください。");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine($"あなたの手: {Janken.GetHandName(selectedHand.Value)}");
+
+            SocketClient(input);
             Console.ReadKey();
         }
 
@@ -40,12 +65,12 @@ namespace JankenClient
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Connect Faild{e.ToString()}");
+                Console.WriteLine($"Connect Failed: {e.ToString()}");
                 return;
             }
 
             // ProtocolHandlerを使ってデータを送信
-            Console.WriteLine($"送信データ: {st}");
+            Console.WriteLine($"\n送信データ: {st}");
             if (!ProtocolHandler.SendData(socket, st))
             {
                 Console.WriteLine("送信に失敗しました。");
@@ -65,13 +90,13 @@ namespace JankenClient
             else
             {
                 // 正常に受信したデータを表示
-                Console.WriteLine($"受信データ: {receiveResult.Data}");
+                Console.WriteLine($"\n受信データ:");
+                Console.WriteLine(receiveResult.Data);
             }
 
             //ソケットを終了している。
             socket.Shutdown(SocketShutdown.Both);
             socket.Close();
         }
-
     }
 }

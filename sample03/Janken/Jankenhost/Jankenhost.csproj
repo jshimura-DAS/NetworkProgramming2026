@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\sample02\ErrorHandling\Common\Common.csproj" />
+    <ProjectReference Include="..\JankenLib\JankenLib.csproj" />
   </ItemGroup>
 
 </Project>

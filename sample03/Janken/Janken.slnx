@@ -2,4 +2,5 @@
   <Project Path="../../sample02/ErrorHandling/Common/Common.csproj" />
   <Project Path="JankenClient/JankenClient.csproj" Id="89751779-ca1f-4f10-a1c0-0a0045bd9d6a" />
   <Project Path="Jankenhost/Jankenhost.csproj" />
+  <Project Path="JankenLib/JankenLib.csproj" />
 </Solution>
