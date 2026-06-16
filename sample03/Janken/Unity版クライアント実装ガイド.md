@@ -157,6 +157,8 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI;
+using TMPro;
 
 namespace JankenUnity
 {
@@ -171,8 +173,8 @@ namespace JankenUnity
         [SerializeField] private Button rockButton;
         [SerializeField] private Button paperButton;
         [SerializeField] private Button scissorsButton;
-        [SerializeField] private Text statusText;
-        [SerializeField] private Text resultText;
+        [SerializeField] private TMP_Text statusText;
+        [SerializeField] private TMP_Text resultText;
 
         private Socket _socket;
         private bool _isConnected = false;
