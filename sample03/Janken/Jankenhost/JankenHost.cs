@@ -27,7 +27,7 @@ namespace Jankenhost
                 Console.WriteLine($"  [{i}] {ipHostInfo.AddressList[i]} (AddressFamily: {ipHostInfo.AddressList[i].AddressFamily})");
             }
 
-            IPAddress ipAddress = ipHostInfo.AddressList[2];
+            IPAddress ipAddress = ipHostInfo.AddressList[1];
             Console.WriteLine($"\n使用するIPアドレス: {ipAddress}");
 
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);

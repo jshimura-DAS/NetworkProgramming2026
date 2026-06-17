@@ -48,7 +48,7 @@ namespace JankenClient
             //IPアドレスやポートを設定(自PC、ポート:11000）
             string hostName = Dns.GetHostName();
             IPHostEntry ipHostInfo = Dns.GetHostEntry(hostName);
-            IPAddress ipAddress = ipHostInfo.AddressList[2];
+            IPAddress ipAddress = ipHostInfo.AddressList[1];
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, 11000);
 
             //外部を指定する場合
